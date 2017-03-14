@@ -1,0 +1,270 @@
+<html>
+
+<head>
+    <title>Exemplo Comtele API</title>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8">
+    <link href="Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="Content/ui-bootstrap-csp.css" rel="stylesheet" />
+    <script src="Scripts/jquery-2.1.4.js"></script>
+    <script src="Scripts/jquery-2.1.4.min.js"></script>
+    <script src="Scripts/jquery.maskedinput.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/bootstrap-filestyle.js"></script>
+    <script src="Scripts/moment-with-locales.min.js"></script>
+    <script src="Scripts/index.js"></script>
+</head>
+
+<body>
+
+    <div class="col-lg-12" id="Success" hidden>
+        <div class="alert alert-success">
+
+        </div>
+    </div>
+
+    <div class="col-lg-12" id="Error" hidden>
+        <div class="alert alert-danger">
+
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <label class="control-label">ENVIAR MENSAGEM</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Remetente</label>
+                            <input id="Sender" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Destinatário</label>
+                            <input id="Receiver" placeholder="DDD+Número" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Chave</label>
+                            <input id="Key" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Agendamento</label>
+                            <input id="Schedule" placeholder="2017-01-25 14:00:00" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="control-label">Mensagem</label>
+                            <textarea id="Content" class="form-control" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button class="btn btn-success" onclick="return sendMessage();">Enviar Agora</button>
+                        </div>
+                        <div class="col-lg-2">
+                            <button class="btn btn-warning" onclick="return sendScheduledMessage();">Agendar Envio</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <label class="control-label">PARÂMETROS DE ENVIO</label>
+                        </div>
+                    </div>
+                    <p>
+                        <label>Remetente:</label>
+                        <text>
+                            Remetente do envio das mensagens, será utilizado apenas para organização de relatórios. Este remetente não será mostrado
+                            aos destinatários. Tamanho máximo de 32 caracteres.
+                        </text>
+                    </p>
+                    <p>
+                        <label>Destinatário:</label>
+                        <text>
+                            Destinatários que receberão a mensagem, pode ser separado por vírgula. Deve possuir o formato DDD+Número.
+                        </text>
+                    </p>
+                    <p>
+                        <label>Chave:</label>
+                        <text>
+                            Para ter acesso a sua chave de utilização da API é necessário acessar a plataforma de envio através do endereço https://sms.comtele.com.br,
+                            aceitar os termos e condições de uso e localizar a chave na tela inicial do sistema no menu “Informações
+                            de Desenvolvedor”.
+                        </text>
+                    </p>
+                    <p>
+                        <label>Mensagem:</label>
+                        <text>
+                            Conteúdo da mensagem que será enviada. Tamanho máximo de 2048 caracteres.
+                        </text>
+                    </p>
+                    <p>
+                        <label>Agendamento:</label>
+                        <text>
+                            Data em que a mensagem será enviada aos destinatários. Padrão: yyyy-MM-dd HH:mm:ss. OBS: Este parâmetro só é obrigatório
+                            se for agendar o envio.
+                        </text>
+                    </p>
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <label class="control-label">PARÂMETROS DE RELATÓRIO</label>
+                        </div>
+                    </div>
+                    <p>
+                        <label>Data Inicial:</label>
+                        <text>
+                            Data inicial para efetuar a busca no relatório. Padrão: yyyy-MM-dd HH:mm:ss
+                        </text>
+                    </p>
+                    <p>
+                        <label>Data Final:</label>
+                        <text>
+                            Data final para efetuar a busca no relatório. Padrão: yyyy-MM-dd HH:mm:ss
+                        </text>
+                    </p>
+                    <p>
+                        <label>Remetente:</label>
+                        <text>
+                            Este parâmetro é opcional. Quando informado, irá trazer apenas as respostas enviadas por um número especifico. Quando omitido,
+                            irá trazer todas as respostas, para omitir o parâmetro retire todo o conteúdo “&sender={remetente}”.
+                        </text>
+                    </p>
+                    <p>
+                        <label>Unread:</label>
+                        <text>
+                            Este parâmetro é opcional, o valor “false” será assumido caso o parâmetro não seja informado. Quando “true” o relatório retornará
+                            apenas mensagens não lidas, quando “false” o reltário retornara mensagens lidas. Para visualizar
+                            todas as respostas utilize o parâmetro “all”.
+                        </text>
+                    </p>
+                    <p>
+                        <label style="color:red;">Atenção:</label>
+                        <text style="color:red;">
+                            O parâmetro "Chave"" sempre deve estar preenchido, para qualquer tipo de transação ou consulta.
+                        </text>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-12">
+
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <label class="control-label">RELATÓRIO DE RESPOSTAS</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Data Inicial</label>
+                            <input id="ReplyInitialDate" placeholder="2017-01-25 14:00:00" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Data Final</label>
+                            <input id="ReplyFinalDate" placeholder="2017-01-25 14:00:00" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Remetente</label>
+                            <input id="ReplySender" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Unread</label>
+                            <input id="ReplyUnread" placeholder="false" class="form-control" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button class="btn btn-success" onclick="return replyReport();">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" style="text-align:center;">
+                        <div class="col-lg-12">
+                            <label class="control-label">RELATÓRIO DE ENVIO DETALHADO</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Data Inicial</label>
+                            <input id="DetailedInitialDate" placeholder="2017-01-25 14:00:00" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Data Final</label>
+                            <input id="DetailedFinalDate" placeholder="2017-01-25 14:00:00" class="form-control" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button class="btn btn-success" onclick="return detailedReport();" class="form-control">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button class="btn btn-success" onclick="return getCredits();">Obter Créditos</button>
+                        </div>
+                        <div class="col-lg-4">
+                            <input id="Credits" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <br />
+                    <p>
+                        <label>OBS:</label>
+                        <text>
+                            Para obter a quantidade de créditos é necessário que o campo "Chave" esteja preenchido.
+                        </text>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

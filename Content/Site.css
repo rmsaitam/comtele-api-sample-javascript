@@ -1,0 +1,27 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+.layout{
+    width:262px !important;
+    text-decoration: none !important;
+	color:black !important;
+    height: 150px !important;
+}
+
+.layout-img{
+    margin-top: 20px !important;
+    width:40px !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+}
